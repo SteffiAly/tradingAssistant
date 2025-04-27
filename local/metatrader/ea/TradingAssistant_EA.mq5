@@ -1,5 +1,5 @@
 //+------------------------------------------------------------------+
-//| TradingAssistant_EA v1.0.5                                       |
+//| TradingAssistant_EA v1.0.6                                       |
 //| Telegram Alerts, Cooldown, Overlay Monitoring                    |
 //| © 2025 SteffiAly                                                 |
 //| GitHub: https://github.com/SteffiAly/tradingAssistant            |
@@ -81,30 +81,10 @@ bool CooldownExpired()
 
 //+------------------------------------------------------------------+
 
-string UrlEncode(string text)
-  {
-   string output = "";
-   for(int i = 0; i < StringLen(text); i++)
-     {
-      ushort c = StringGetCharacter(text, i);
-      if((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || (c >= '0' && c <= '9') || c == '-' || c == '_' || c == '.' )
-         output += CharToString(c);
-      else if(c == ' ')
-         output += "%20";
-      else
-         output += StringFormat("%%%02X", c);
-     }
-   return output;
-  }
-
-//+------------------------------------------------------------------+
-
 void SendTelegram(string text)
   {
    string url = "https://api.telegram.org/bot" + TelegramBotToken + "/sendMessage";
-
-   string encodedText = UrlEncode(text);
-   string data = "chat_id=" + TelegramChatID + "&text=" + encodedText;
+   string data = "chat_id=" + TelegramChatID + "&text=" + text;
 
    char postData[];
    StringToCharArray(data, postData);
@@ -123,6 +103,7 @@ void SendTelegram(string text)
       Print("✅ Telegram Alert sent. Response: ", response);
      }
   }
+
 
 //+------------------------------------------------------------------+
 void DrawOverlay(double spread, double atr14, double atr100, double spreadATR, double crv, bool good)
