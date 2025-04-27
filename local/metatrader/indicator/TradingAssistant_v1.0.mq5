@@ -1,5 +1,6 @@
 //+------------------------------------------------------------------+
-//| TradingAssistant v1.0.2                                          |
+//| TradingAssistant v1.0.3                                          |
+//| Fixed WebRequest (Telegram)                                      |
 //| Live Spread & ATR Monitoring + Telegram Alerts                   |
 //|                                                                  |
 //| © 2025 SteffiAly                                                 |
@@ -94,11 +95,20 @@ void SendTelegram(string text)
   {
    string url = "https://api.telegram.org/bot" + TelegramBotToken + "/sendMessage";
    string headers = "Content-Type: application/x-www-form-urlencoded";
-   char result[];
+   uchar data[];
+   StringToCharArray("chat_id=" + TelegramChatID + "&text=" + text, data);
+
+   uchar result[];
    string response_headers;
-   string data = "chat_id=" + TelegramChatID + "&text=" + text;
+
    ResetLastError();
-   int res = WebRequest("POST", url, headers, data, result, response_headers);
+   int res = WebRequest("POST", url, headers, 5000, data, result, response_headers);
+
+   if(res == -1)
+     {
+      Print("WebRequest failed. Error: ", GetLastError());
+     }
   }
+
 
 //+------------------------------------------------------------------+
