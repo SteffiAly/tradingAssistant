@@ -1,5 +1,5 @@
 //+------------------------------------------------------------------+
-//| TradingAssistant_EA v1.0.3                                       |
+//| TradingAssistant_EA v1.0.4                                       |
 //| Telegram Alerts, Cooldown, Overlay Monitoring                    |
 //| © 2025 SteffiAly                                                 |
 //| GitHub: https://github.com/SteffiAly/tradingAssistant            |
@@ -83,7 +83,11 @@ bool CooldownExpired()
 void SendTelegram(string text)
   {
    string url = "https://api.telegram.org/bot" + TelegramBotToken + "/sendMessage";
-   string data = "chat_id=" + TelegramChatID + "&text=" + text;
+   string encodedText;
+   StringReplace(text, " ", "%20");   // Simple URL Encoding for spaces
+   encodedText = text; // Hier könnten wir für mehr Zeichen erweitern
+
+   string data = "chat_id=" + TelegramChatID + "&text=" + encodedText;
    char postData[];
    StringToCharArray(data, postData);
    char result[];
@@ -95,7 +99,11 @@ void SendTelegram(string text)
    if(res == -1)
       Print("❌ Telegram WebRequest failed. Error: ", GetLastError());
    else
-      Print("✅ Telegram Alert sent.");
+  {
+      string response = CharArrayToString(result);
+      Print("✅ Telegram Alert sent. Response: ", response);
+  }
+  
   }
 
 //+------------------------------------------------------------------+
