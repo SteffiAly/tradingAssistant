@@ -1,6 +1,6 @@
 //+------------------------------------------------------------------+
-//| TradingAssistant v1.0.3                                          |
-//| Fixed WebRequest (Telegram)                                      |
+//| TradingAssistant v1.0.4                                          |
+//| Added Testmode for Telegram connection check                     |
 //| Live Spread & ATR Monitoring + Telegram Alerts                   |
 //|                                                                  |
 //| © 2025 SteffiAly                                                 |
@@ -19,6 +19,7 @@ input double TP_Factor = 2.0;
 input double Max_Spread_ATR_Percent = 50.0;
 input string TelegramBotToken = "YOUR_BOT_TOKEN";
 input string TelegramChatID   = "YOUR_CHAT_ID";
+input bool TestMode = false;
 
 // Global handles
 int handleATR14;
@@ -36,7 +37,13 @@ int OnInit()
    // Create ATR handles
    handleATR14  = iATR(NULL, 0, 14);
    handleATR100 = iATR(NULL, 0, 100);
-
+   
+   if(TestMode)
+     {
+      string message = StringFormat("🤖 TradingAssistant v1.1 gestartet!\nSymbol: %s\nTestmodus aktiv – Verbindung steht!", _Symbol);
+      SendTelegram(message);
+     }
+     
    return(INIT_SUCCEEDED);
   }
 //+------------------------------------------------------------------+
