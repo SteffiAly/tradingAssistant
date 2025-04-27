@@ -1,5 +1,5 @@
 //+------------------------------------------------------------------+
-//| TradingAssistant_EA v1.0.4                                       |
+//| TradingAssistant_EA v1.0.5                                       |
 //| Telegram Alerts, Cooldown, Overlay Monitoring                    |
 //| © 2025 SteffiAly                                                 |
 //| GitHub: https://github.com/SteffiAly/tradingAssistant            |
@@ -80,16 +80,35 @@ bool CooldownExpired()
   }
 
 //+------------------------------------------------------------------+
+
+string UrlEncode(string text)
+  {
+   string output = "";
+   for(int i = 0; i < StringLen(text); i++)
+     {
+      ushort c = StringGetCharacter(text, i);
+      if((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || (c >= '0' && c <= '9') || c == '-' || c == '_' || c == '.' )
+         output += CharToString(c);
+      else if(c == ' ')
+         output += "%20";
+      else
+         output += StringFormat("%%%02X", c);
+     }
+   return output;
+  }
+
+//+------------------------------------------------------------------+
+
 void SendTelegram(string text)
   {
    string url = "https://api.telegram.org/bot" + TelegramBotToken + "/sendMessage";
-   string encodedText;
-   StringReplace(text, " ", "%20");   // Simple URL Encoding for spaces
-   encodedText = text; // Hier könnten wir für mehr Zeichen erweitern
 
+   string encodedText = UrlEncode(text);
    string data = "chat_id=" + TelegramChatID + "&text=" + encodedText;
+
    char postData[];
    StringToCharArray(data, postData);
+
    char result[];
    string headers = "Content-Type: application/x-www-form-urlencoded\r\n";
 
@@ -99,11 +118,10 @@ void SendTelegram(string text)
    if(res == -1)
       Print("❌ Telegram WebRequest failed. Error: ", GetLastError());
    else
-  {
+     {
       string response = CharArrayToString(result);
       Print("✅ Telegram Alert sent. Response: ", response);
-  }
-  
+     }
   }
 
 //+------------------------------------------------------------------+
