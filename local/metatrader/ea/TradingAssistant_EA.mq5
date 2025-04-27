@@ -1,5 +1,5 @@
 //+------------------------------------------------------------------+
-//| TradingAssistant_EA v1.0.6                                       |
+//| TradingAssistant_EA v1.0.7                                       |
 //| Telegram Alerts, Cooldown, Overlay Monitoring                    |
 //| © 2025 SteffiAly                                                 |
 //| GitHub: https://github.com/SteffiAly/tradingAssistant            |
@@ -62,7 +62,7 @@ void OnTick()
    if(goodConditions && CooldownExpired())
      {
       string alertMsg = StringFormat(
-         "📊 TradingAssistant Alert!\nSymbol: %s\nSpread: %.1f | ATR: %.2f | CRV: 1:%.2f\nZeit: %s",
+         "- TradingAssistant Alert! -\nSymbol: %s\nSpread: %.1f | ATR: %.2f | CRV: 1:%.2f\nZeit: %s",
          _Symbol, spreadPoints, atr14[0], crv, TimeToString(TimeCurrent(), TIME_DATE|TIME_SECONDS)
       );
       SendTelegram(alertMsg);
