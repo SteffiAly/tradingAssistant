@@ -1,11 +1,9 @@
 //+------------------------------------------------------------------+
-//| TradingAssistant_EA v1.0.0                                       |
+//| TradingAssistant_EA v1.0.1                                       |
 //| Telegram Alerts, Cooldown, Overlay Monitoring                    |
-//|                                                                  |
 //| © 2025 SteffiAly                                                 |
 //| GitHub: https://github.com/SteffiAly/tradingAssistant            |
 //+------------------------------------------------------------------+
-
 #property strict
 
 // Inputs
@@ -45,7 +43,9 @@ int OnInit()
 //+------------------------------------------------------------------+
 void OnTick()
   {
-   double spreadPoints = (Ask - Bid) / _Point;
+   double ask = SymbolInfoDouble(_Symbol, SYMBOL_ASK);
+   double bid = SymbolInfoDouble(_Symbol, SYMBOL_BID);
+   double spreadPoints = (ask - bid) / _Point;
 
    double atr14[], atr100[];
    if(CopyBuffer(handleATR14, 0, 0, 1, atr14) < 0) return;
