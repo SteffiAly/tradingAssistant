@@ -1,5 +1,5 @@
 //+------------------------------------------------------------------+
-//| TradingAssistant_EA v1.0.0                                       |
+//| TradingAssistant_EA v1.0.3                                       |
 //| Telegram Alerts, Cooldown, Overlay Monitoring                    |
 //| © 2025 SteffiAly                                                 |
 //| GitHub: https://github.com/SteffiAly/tradingAssistant            |
@@ -17,7 +17,7 @@ input string   TelegramChatID        = "YOUR_CHAT_ID_HERE";
 
 // Globals
 datetime lastMessageTime = 0;
-string lastMessageText = "Keine";
+string lastMessageText = "None";
 
 //--- Indicator handles
 int handleATR14;
@@ -43,7 +43,7 @@ int OnInit()
 //+------------------------------------------------------------------+
 void OnTick()
   {
-   double spreadPoints = SymbolInfoInteger(_Symbol, SYMBOL_SPREAD);
+   double spreadPoints = SymbolInfoInteger(_Symbol, SYMBOL_SPREAD) * _Point;
 
    double atr14[], atr100[];
    if(CopyBuffer(handleATR14, 0, 0, 1, atr14) < 0) return;
@@ -103,7 +103,7 @@ void DrawOverlay(double spread, double atr14, double atr100, double spreadATR, d
   {
    string status = good ? "🟢 Good Conditions" : "🔴 Unfavorable";
    string overlayText = StringFormat(
-      "TradingAssistant_EA v1.0.0\nSpread: %.1f\nATR(14): %.2f | ATR(100): %.2f\nSpread/ATR: %.1f %%\nCRV: 1:%.2f\n%s\nLetzte Nachricht: %s",
+      "TradingAssistant_EA v1.0.0\nSpread: %.1f\nATR(14): %.2f | ATR(100): %.2f\nSpread/ATR: %.1f %%\nCRV: 1:%.2f\n%s\nLast Message: %s",
       spread, atr14, atr100, spreadATR, crv, status, lastMessageText
    );
 
